@@ -1,0 +1,128 @@
+<!DocType HTML>
+
+<html>
+	<head>
+		<title> Marvel</title>
+	<style>
+		.navbar
+		{
+			background-color:skyblue;
+			color: white;
+			padding:2px;
+			top:0px;
+			left:0px;
+			position:fixed;
+			width:100%;
+
+		}
+		
+		input
+		{
+			margin-top:120px;
+			padding:20px 30px 20px 30px; 
+		}
+		
+		.flex
+		{
+
+			margin-left: 550px;
+		}
+		
+		h1
+		{
+			text-align: center;
+		}
+		.card
+		{
+			border: 4px solid skyblue;
+			background-color:pink;
+			color: white;
+			margin: 20px;
+			padding: 40px;
+			text-align: center;
+			width: 250px;
+			margin-left: 100px;
+			border-radius: 20px;
+
+       		}
+       		.click
+       		{
+       			padding:10px;	
+       		}
+		.marvel
+		{
+			display: flex;
+			flex-wrap: wrap;
+		}
+	</style>
+	</head>
+	
+	<body>
+	
+		<div class="navbar">
+			<h1>Marvel Movies</h1>
+		</div>
+		
+		<div class="flex">
+			<input class = "search" type="text" placeholder="enter marvelmovie name..."/>
+			<button class ="click" onClick = "search()"> search </button>
+		</div>
+		<div class="marvel"></div>
+		
+		
+	
+	<script>
+		async function fetchData(url)
+		{
+			const response = await fetch(url);
+			const jsonData = await response.json()
+			return jsonData
+		}
+
+
+		let marvel = document.querySelector(".marvel");
+
+		let cosmics = [];
+
+		async function search()
+		{
+			let search = document.querySelector(".search").value;
+
+			let response = await fetchData(`https://www.omdbapi.com/?apikey=6663c708&s=${search}`);
+			//console.log(response);
+
+			cosmics = response?.Search;
+
+			let movie = response?.Search;
+			movie.map(({Poster : movieposter,Title : movietitle,Year},index)=>
+			{
+				let div=document.createElement("div");
+				div.setAttribute("class", "card")
+
+				let movie = document.createElement("img");
+				movie.setAttribute("src", movieposter);
+				movie.style.width = "200px";
+				movie.style.height = "200px";
+
+				let titleTag = document.createElement("div");
+				titleTag.innerText = movietitle;
+				titleTag.style.fontSize = "22px";
+
+				let year = document.createElement("div");
+				year.innerText = Year;
+				year.style.fontSize = "20px";
+
+				div.setAttribute("onclick", `displaymoviedetails(${index})`);
+
+
+				div.append(movie,titleTag,year);
+				marvel.append(div);
+			})
+		}
+
+			
+			
+	</script>
+	</body>
+	
+</html>	
